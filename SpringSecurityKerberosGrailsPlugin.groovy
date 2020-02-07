@@ -15,6 +15,8 @@
 import grails.plugin.springsecurity.SecurityFilterPosition
 import grails.plugin.springsecurity.SpringSecurityUtils
 
+import grails.plugin.springsecurity.kerberos.KerberosAdapterAuthenticationProvider
+import grails.plugin.springsecurity.kerberos.KerberosTracedServiceAuthenticationProvider
 import org.springframework.security.kerberos.authentication.KerberosAuthenticationProvider
 import org.springframework.security.kerberos.authentication.KerberosServiceAuthenticationProvider
 import org.springframework.security.kerberos.authentication.sun.GlobalSunJaasKerberosConfig
@@ -26,7 +28,7 @@ import org.springframework.security.kerberos.web.authentication.SpnegoEntryPoint
 
 class SpringSecurityKerberosGrailsPlugin {
 
-	String version = '1.0.0'
+	String version = '1.0.SEM'
 	String grailsVersion = '2.3 > *'
 	List loadAfter = ['springSecurityCore']
 	List pluginExcludes = [
@@ -93,7 +95,7 @@ class SpringSecurityKerberosGrailsPlugin {
 			servicePrincipal = conf.kerberos.ticketValidator.servicePrincipal
 		}
 
-		kerberosAuthenticationProvider(KerberosAuthenticationProvider) {
+		kerberosAuthenticationProvider(KerberosAdapterAuthenticationProvider) {
 			kerberosClient = ref('kerberosClient')
 			userDetailsService = ref('userDetailsService')
 		}
@@ -102,7 +104,7 @@ class SpringSecurityKerberosGrailsPlugin {
 			debug = conf.kerberos.client.debug // false
 		}
 
-		kerberosServiceAuthenticationProvider(KerberosServiceAuthenticationProvider) {
+		kerberosServiceAuthenticationProvider(KerberosTracedServiceAuthenticationProvider) {
 			ticketValidator = ref('kerberosTicketValidator')
 			userDetailsService = ref('userDetailsService')
 		}
